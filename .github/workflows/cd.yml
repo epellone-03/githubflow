@@ -1,0 +1,29 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build artifact
+        run: echo "Costruisco l'artifact dal commit $(git rev-parse --short HEAD)"
+
+  deploy-staging:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy su staging
+        run: echo "Deploy in ambiente di staging..."
+      - name: Smoke test
+        run: echo "Eseguo smoke test su staging..."
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy in produzione
+        run: echo "Deploy in produzione completato."
